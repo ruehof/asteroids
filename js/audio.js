@@ -159,11 +159,11 @@ export class AudioManager {
 
         const filter = ctx.createBiquadFilter();
         filter.type = 'lowpass';
-        filter.frequency.value = 120;
+        filter.frequency.value = 200;
 
         const gain = ctx.createGain();
         gain.gain.setValueAtTime(0, ctx.currentTime);
-        gain.gain.linearRampToValueAtTime(0.1, ctx.currentTime + 0.05);
+        gain.gain.linearRampToValueAtTime(0.25, ctx.currentTime + 0.05);
 
         noise.connect(filter);
         filter.connect(gain);
