@@ -6,6 +6,7 @@ import { Bullet } from './bullet.js';
 import { spawnAsteroid } from './asteroid.js';
 import { ParticleSystem } from './particles.js';
 import { circleCollision } from './utils.js';
+import { AudioManager } from './audio.js';
 
 const INITIAL_ASTEROIDS = 4;
 const SHOOT_COOLDOWN = 10; // frames
@@ -17,6 +18,7 @@ class Game {
         this.ctx = canvas.getContext('2d');
         this.input = new Input();
         this.particles = new ParticleSystem();
+        this.audio = new AudioManager();
 
         this.resize();
         window.addEventListener('resize', () => this.resize());
@@ -53,6 +55,7 @@ class Game {
 
     nextLevel() {
         this.level++;
+        if (this.level > 1) this.audio.play('levelUp');
         const count = INITIAL_ASTEROIDS + (this.level - 1) * 2;
         for (let i = 0; i < count; i++) {
             this.asteroids.push(spawnAsteroid(this.canvas));
@@ -85,6 +88,7 @@ class Game {
 
         // Playing state
         this.ship.update(this.input, this.canvas);
+        this.audio.setThrust(this.ship.thrusting);
 
         // Shooting
         if (this.shootCooldown > 0) this.shootCooldown--;
@@ -95,6 +99,7 @@ class Game {
             };
             this.bullets.push(new Bullet(nose.x, nose.y, this.ship.angle));
             this.shootCooldown = SHOOT_COOLDOWN;
+            this.audio.play('shoot');
         }
 
         // Update bullets
@@ -114,6 +119,7 @@ class Game {
                     this.score += asteroid.score;
                     this.particles.emit(asteroid.x, asteroid.y, asteroid.color, 20);
                     this.screenShake = 5;
+                    this.audio.play('explosion', asteroid.size);
 
                     const children = asteroid.split();
                     this.asteroids.push(...children);
@@ -152,10 +158,13 @@ class Game {
         this.particles.emit(this.ship.x, this.ship.y, '#0ff', 30);
         this.particles.emit(this.ship.x, this.ship.y, '#fff', 10);
         this.screenShake = 12;
+        this.audio.setThrust(false);
+        this.audio.play('shipExplosion');
         this.lives--;
 
         if (this.lives <= 0) {
             this.state = 'gameover';
+            this.audio.play('gameOver');
         } else {
             this.ship.reset(this.canvas.width / 2, this.canvas.height / 2);
         }
