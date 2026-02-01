@@ -3,7 +3,7 @@
 import { Input } from './input.js';
 import { Ship } from './ship.js';
 import { Bullet } from './bullet.js';
-import { Asteroid, spawnAsteroid } from './asteroid.js';
+import { spawnAsteroid } from './asteroid.js';
 import { ParticleSystem } from './particles.js';
 import { circleCollision } from './utils.js';
 
