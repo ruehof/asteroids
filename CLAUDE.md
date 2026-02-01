@@ -16,6 +16,7 @@ Then open http://localhost:3000.
 ```bash
 npm run lint          # check for errors
 npm run lint:fix      # auto-fix
+```
 
 **Deployed at:** https://ruehof.github.io/asteroids/ (GitHub Pages, serves from `master` branch root)
 
@@ -30,6 +31,7 @@ game.js  →  input.js (keyboard state)
          →  bullet.js → utils.js
          →  asteroid.js → utils.js
          →  particles.js → utils.js
+         →  audio.js (Web Audio API synthesized sounds)
          →  utils.js (collision detection)
 ```
 
@@ -44,6 +46,8 @@ game.js  →  input.js (keyboard state)
 **Collision:** Circle-based (`circleCollision` in utils.js). Ship hitbox is 60% of visual radius for fairness.
 
 **Asteroids split:** large (magenta, 20pts) → 2 medium (orange, 50pts) → 2 small (green, 100pts). Sizes, speeds, and colors are defined in `SIZE_CONFIG` in asteroid.js.
+
+**Audio (audio.js):** `AudioManager` class synthesizes all sounds programmatically via Web Audio API (oscillators, noise buffers, frequency sweeps) — no external audio files. `AudioContext` is lazily initialized on first user input (browser autoplay policy). Game.js calls `audio.play(soundName, param)` for one-shots and `audio.setThrust(bool)` for the looping thrust sound.
 
 ## Visual Style
 
