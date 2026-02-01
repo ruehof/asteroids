@@ -4,13 +4,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Development
 
-No build tools, bundler, or dependencies. Pure ES6 modules served directly to the browser.
+No build tools or bundler. Pure ES6 modules served directly to the browser. ESLint for linting.
 
 **Run locally:** Requires a local HTTP server (browsers block ES module imports from `file://`).
 ```bash
 npx serve .
 ```
 Then open http://localhost:3000.
+
+**Lint:**
+```bash
+npm run lint          # check for errors
+npm run lint:fix      # auto-fix
 
 **Deployed at:** https://ruehof.github.io/asteroids/ (GitHub Pages, serves from `master` branch root)
 
